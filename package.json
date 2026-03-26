@@ -1,9 +1,9 @@
 {
   "name": "rey-lang",
-  "displayName": "Rey",
-  "description": "Syntax highlighting for the Rey programming language (.rey).",
-  "version": "0.0.1",
-  "main": "./extension.js",
+  "displayName": "Rey Language Support",
+  "description": "Full language support for the Rey programming language - syntax, IntelliSense, diagnostics",
+  "version": "0.1.0",
+  "main": "./out/client/extension.js",
   "publisher": "rey-language",
   "license": "MIT",
   "engines": {
@@ -11,6 +11,11 @@
   },
   "categories": [
     "Programming Languages"
+  ],
+  "keywords": [
+    "rey",
+    "language",
+    "programming"
   ],
   "activationEvents": [
     "onLanguage:rey"
@@ -30,6 +35,77 @@
         "scopeName": "source.rey",
         "path": "./syntaxes/rey.tmLanguage.json"
       }
-    ]
+    ],
+    "snippets": [
+      {
+        "language": "rey",
+        "path": "./snippets/rey.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "rey.restartServer",
+        "title": "Rey: Restart Language Server",
+        "category": "Rey"
+      },
+      {
+        "command": "rey.showOutput",
+        "title": "Rey: Show Output",
+        "category": "Rey"
+      }
+    ],
+    "configuration": {
+      "title": "Rey Language Server",
+      "properties": {
+        "rey.languageServer.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable the Rey language server for IntelliSense and diagnostics"
+        },
+        "rey.languageServer.trace": {
+          "type": "string",
+          "default": "off",
+          "enum": ["off", "messages", "verbose"],
+          "description": "Trace level for language server communication"
+        },
+        "rey.compiler.path": {
+          "type": "string",
+          "default": "reyc",
+          "description": "Path to the Rey compiler executable"
+        },
+        "rey.compiler.runOnSave": {
+          "type": "boolean",
+          "default": true,
+          "description": "Run compiler diagnostics on save"
+        },
+        "rey.format.indentSize": {
+          "type": "number",
+          "default": 4,
+          "description": "Number of spaces for indentation"
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -b",
+    "watch": "tsc -b -w",
+    "lint": "eslint src --ext ts",
+    "package": "vsce package"
+  },
+  "dependencies": {
+    "vscode-languageclient": "^9.0.1",
+    "vscode-languageserver": "^9.0.1",
+    "vscode-languageserver-textdocument": "^1.0.11",
+    "vscode-uri": "^3.0.8"
+  },
+  "devDependencies": {
+    "@types/node": "^20.14.0",
+    "@types/vscode": "^1.90.0",
+    "typescript": "^5.4.5",
+    "@vscode/vsce": "^2.29.0",
+    "eslint": "^8.57.0",
+    "@typescript-eslint/eslint-plugin": "^7.13.0",
+    "@typescript-eslint/parser": "^7.13.0"
   }
 }

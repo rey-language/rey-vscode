@@ -1,0 +1,40 @@
+// Simple Rey test program
+var x: int = 10;
+const PI: float = 3.14159;
+var name: String = "Rey Language";
+
+func add(a: int, b: int): int {
+    return a + b;
+}
+
+struct Person {
+    name: String,
+    age: int,
+    
+    pub func create(n: String, a: int): Person {
+        return Person { name: n, age: a };
+    }
+    
+    pub func introduce(): Void {
+        println("Hello, I am {name} and I am {age} years old");
+    }
+}
+
+enum Color {
+    Red,
+    Green,
+    Blue
+}
+
+match Color::Red {
+    Color::Red => { println("Red color"); },
+    Color::Green => { println("Green color"); },
+    _ => { println("Unknown color"); }
+}
+
+var numbers: [int] = [1, 2, 3, 4, 5];
+push(numbers, 6);
+println("Length: {len(numbers)}");
+
+var person = Person::create("Alice", 30);
+person.introduce();

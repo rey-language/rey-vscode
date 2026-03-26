@@ -1,0 +1,194 @@
+{
+  "Function Declaration": {
+    "prefix": "func",
+    "body": [
+      "func ${1:name}(${2:params}): ${3:Void} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create a function declaration"
+  },
+  "Public Function": {
+    "prefix": "pub func",
+    "body": [
+      "pub func ${1:name}(${2:params}): ${3:Void} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create a public function declaration"
+  },
+  "Export Public Function": {
+    "prefix": "export pub func",
+    "body": [
+      "export pub func ${1:name}(${2:params}): ${3:Void} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create an exported public function"
+  },
+  "Struct Declaration": {
+    "prefix": "struct",
+    "body": [
+      "struct ${1:Name} {",
+      "\t${2:field}: ${3:type},",
+      "",
+      "\tpub func ${4:create}(${5:params}): $1 {",
+      "\t\treturn $1 { $0 };",
+      "\t}",
+      "}"
+    ],
+    "description": "Create a struct with a static factory method"
+  },
+  "Enum Declaration": {
+    "prefix": "enum",
+    "body": [
+      "enum ${1:Name} {",
+      "\t${2:Variant1},",
+      "\t${3:Variant2},",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create an enum declaration"
+  },
+  "Match Expression": {
+    "prefix": "match",
+    "body": [
+      "match ${1:value} {",
+      "\t${2:Pattern1} => { $3 },",
+      "\t${4:Pattern2} => { $5 },",
+      "\t_ => { $0 },",
+      "}"
+    ],
+    "description": "Create a match expression"
+  },
+  "For Loop": {
+    "prefix": "for",
+    "body": [
+      "for ${1:item} in ${2:iterable} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create a for-in loop"
+  },
+  "For Range Loop": {
+    "prefix": "forr",
+    "body": [
+      "for ${1:i} in range(${2:start}, ${3:end}) {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create a for-in-range loop"
+  },
+  "While Loop": {
+    "prefix": "while",
+    "body": [
+      "while ${1:condition} {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create a while loop"
+  },
+  "Infinite Loop": {
+    "prefix": "loop",
+    "body": [
+      "loop {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create an infinite loop"
+  },
+  "If Statement": {
+    "prefix": "if",
+    "body": [
+      "if (${1:condition}) {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create an if statement"
+  },
+  "If-Else Statement": {
+    "prefix": "ife",
+    "body": [
+      "if (${1:condition}) {",
+      "\t$2",
+      "} else {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create an if-else statement"
+  },
+  "Lambda Expression": {
+    "prefix": "=>",
+    "body": [
+      "(${1:params}) => ${2:expression}"
+    ],
+    "description": "Create a lambda expression"
+  },
+  "Variable Declaration": {
+    "prefix": "var",
+    "body": [
+      "var ${1:name}${2:: ${3:type}} = ${4:value};$0"
+    ],
+    "description": "Create a mutable variable declaration"
+  },
+  "Constant Declaration": {
+    "prefix": "const",
+    "body": [
+      "const ${1:NAME}${2:: ${3:type}} = ${4:value};$0"
+    ],
+    "description": "Create a constant declaration"
+  },
+  "Import Statement": {
+    "prefix": "import",
+    "body": [
+      "import ${1:module};$0"
+    ],
+    "description": "Create an import statement"
+  },
+  "Import with Submodule": {
+    "prefix": "importfrom",
+    "body": [
+      "import ${1:module}::${2:item};$0"
+    ],
+    "description": "Create an import statement with submodule"
+  },
+  "Print Variable": {
+    "prefix": "println",
+    "body": [
+      "println($0);"
+    ],
+    "description": "Create a println statement"
+  },
+  "Function Parameter": {
+    "prefix": "param",
+    "body": [
+      "${1:name}: ${2:type}${3: = ${4:default}}"
+    ],
+    "description": "Create a function parameter"
+  },
+  "Dictionary Literal": {
+    "prefix": "dict",
+    "body": [
+      "{${1:key}: ${2:value}$0}"
+    ],
+    "description": "Create a dictionary literal"
+  },
+  "Array Literal": {
+    "prefix": "arr",
+    "body": [
+      "[${1:element}$0]"
+    ],
+    "description": "Create an array literal"
+  },
+  "Try-Catch Pattern": {
+    "prefix": "try",
+    "body": [
+      "// Rey does not have exceptions - use Result types or match on Optionals",
+      "match ${1:result} {",
+      "\t${2:Ok}::value => { $3 },",
+      "\t${4:Err}::error => { $0 },",
+      "}"
+    ],
+    "description": "Template for handling Result types with match"
+  }
+}

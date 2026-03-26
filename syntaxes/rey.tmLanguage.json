@@ -4,15 +4,28 @@
   "scopeName": "source.rey",
   "patterns": [
     { "include": "#comments" },
+    { "include": "#strings-multiline" },
     { "include": "#strings" },
+    { "include": "#chars" },
     { "include": "#numbers" },
     { "include": "#booleans" },
     { "include": "#null" },
-    { "include": "#keywords" },
+    { "include": "#storage-modifiers" },
+    { "include": "#keywords-control" },
+    { "include": "#keywords-declaration" },
+    { "include": "#keywords-operator" },
     { "include": "#types" },
-    { "include": "#builtins" },
-    { "include": "#functionDecl" },
-    { "include": "#functionCall" }
+    { "include": "#operators" },
+    { "include": "#punctuation" },
+    { "include": "#import-statement" },
+    { "include": "#enum-pattern" },
+    { "include": "#struct-decl" },
+    { "include": "#enum-decl" },
+    { "include": "#function-decl" },
+    { "include": "#lambda" },
+    { "include": "#builtin-functions" },
+    { "include": "#function-call" },
+    { "include": "#identifiers" }
   ],
   "repository": {
     "comments": {
@@ -24,88 +37,484 @@
       ]
     },
     "strings": {
+      "name": "string.quoted.double.rey",
+      "begin": "\"",
+      "end": "\"",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.string.begin.rey" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.string.end.rey" }
+      },
       "patterns": [
         {
-          "name": "string.quoted.double.rey",
-          "begin": "\"",
-          "end": "\"",
+          "name": "constant.character.escape.rey",
+          "match": "\\\\."
+        },
+        {
+          "name": "meta.string.interpolation.rey",
+          "begin": "\\{",
+          "end": "\\}",
+          "beginCaptures": {
+            "0": { "name": "punctuation.section.interpolation.begin.rey" }
+          },
+          "endCaptures": {
+            "0": { "name": "punctuation.section.interpolation.end.rey" }
+          },
           "patterns": [
             {
-              "name": "constant.character.escape.rey",
-              "match": "\\\\."
+              "include": "#expression-content"
             }
           ]
+        }
+      ]
+    },
+    "strings-multiline": {
+      "name": "string.quoted.triple.rey",
+      "begin": "\"\"\"",
+      "end": "\"\"\"",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.string.begin.rey" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.string.end.rey" }
+      },
+      "patterns": [
+        {
+          "name": "constant.character.escape.rey",
+          "match": "\\\\."
+        },
+        {
+          "name": "meta.string.interpolation.rey",
+          "begin": "\\{",
+          "end": "\\}",
+          "beginCaptures": {
+            "0": { "name": "punctuation.section.interpolation.begin.rey" }
+          },
+          "endCaptures": {
+            "0": { "name": "punctuation.section.interpolation.end.rey" }
+          },
+          "patterns": [
+            {
+              "include": "#expression-content"
+            }
+          ]
+        }
+      ]
+    },
+    "chars": {
+      "name": "string.quoted.single.rey",
+      "begin": "'",
+      "end": "'",
+      "beginCaptures": {
+        "0": { "name": "punctuation.definition.string.begin.rey" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.definition.string.end.rey" }
+      },
+      "patterns": [
+        {
+          "name": "constant.character.escape.rey",
+          "match": "\\\\."
         }
       ]
     },
     "numbers": {
       "patterns": [
         {
-          "name": "constant.numeric.rey",
-          "match": "\\b\\d+(?:\\.\\d+)?\\b"
+          "name": "constant.numeric.float.rey",
+          "match": "\\b\\d+\\.\\d+\\b"
+        },
+        {
+          "name": "constant.numeric.integer.rey",
+          "match": "\\b\\d+\\b"
         }
       ]
     },
     "booleans": {
-      "patterns": [
-        {
-          "name": "constant.language.boolean.rey",
-          "match": "\\b(?:true|false)\\b"
-        }
-      ]
+      "name": "constant.language.boolean.rey",
+      "match": "\\b(?:true|false)\\b"
     },
     "null": {
+      "name": "constant.language.null.rey",
+      "match": "\\bnull\\b"
+    },
+    "storage-modifiers": {
       "patterns": [
         {
-          "name": "constant.language.null.rey",
-          "match": "\\bnull\\b"
+          "name": "storage.modifier.visibility.rey",
+          "match": "\\b(?:export|pub)\\b"
         }
       ]
     },
-    "keywords": {
-      "patterns": [
-        {
-          "name": "keyword.control.rey",
-          "match": "\\b(?:func|var|return|if|else|while|for|in|break|continue)\\b"
-        }
-      ]
+    "keywords-control": {
+      "name": "keyword.control.rey",
+      "match": "\\b(?:if|else|while|for|in|loop|break|continue|return|match)\\b"
+    },
+    "keywords-declaration": {
+      "name": "keyword.declaration.rey",
+      "match": "\\b(?:func|var|const|struct|enum|type|import)\\b"
+    },
+    "keywords-operator": {
+      "name": "keyword.operator.word.rey",
+      "match": "\\b(?:instanceof)\\b"
     },
     "types": {
       "patterns": [
         {
-          "name": "storage.type.rey",
-          "match": "\\b(?:int|float|String|bool|Void|null)\\b"
+          "name": "storage.type.primitive.rey",
+          "match": "\\b(?:int|uint|byte|float|double|String|bool|char|Void)\\b"
+        },
+        {
+          "name": "storage.type.array.rey",
+          "match": "\\[\\s*(?:int|uint|byte|float|double|String|bool|char|Void|[A-Z][a-zA-Z0-9_]*)\\s*\\]"
+        },
+        {
+          "name": "storage.type.dict.rey",
+          "match": "\\{\\s*(?:int|uint|byte|float|double|String|bool|char|[A-Z][a-zA-Z0-9_]*)\\s*:\\s*(?:int|uint|byte|float|double|String|bool|char|Void|[A-Z][a-zA-Z0-9_]*)\\s*\\}"
+        },
+        {
+          "name": "storage.type.nullable.rey",
+          "match": "(?:int|uint|byte|float|double|String|bool|char|Void|[A-Z][a-zA-Z0-9_]*)\\?"
         }
       ]
     },
-    "builtins": {
+    "operators": {
       "patterns": [
         {
-          "name": "support.function.builtin.rey",
-          "match": "\\b(?:println|len|push|pop|input|range)\\b(?=\\s*\\()"
+          "name": "keyword.operator.assignment.rey",
+          "match": "(?:\\+=|-=|\\*=|/=|%=|=)"
+        },
+        {
+          "name": "keyword.operator.comparison.rey",
+          "match": "(?:==|!=|<=|>=|<|>)"
+        },
+        {
+          "name": "keyword.operator.arithmetic.rey",
+          "match": "(?:\\+|-|\\*|/|%)"
+        },
+        {
+          "name": "keyword.operator.logical.rey",
+          "match": "(?:&&|\\|\\||!)"
+        },
+        {
+          "name": "keyword.operator.increment.rey",
+          "match": "(?:\\+\\+|--)"
+        },
+        {
+          "name": "keyword.operator.arrow.rey",
+          "match": "=>"
         }
       ]
     },
-    "functionDecl": {
+    "punctuation": {
       "patterns": [
         {
-          "name": "meta.function.declaration.rey",
-          "match": "\\bfunc\\s+([A-Za-z_][A-Za-z0-9_]*)\\b",
+          "name": "punctuation.separator.colon.rey",
+          "match": ":"
+        },
+        {
+          "name": "punctuation.separator.comma.rey",
+          "match": ","
+        },
+        {
+          "name": "punctuation.terminator.rey",
+          "match": ";"
+        },
+        {
+          "name": "punctuation.accessor.double-colon.rey",
+          "match": "::"
+        },
+        {
+          "name": "punctuation.accessor.dot.rey",
+          "match": "\\."
+        }
+      ]
+    },
+    "import-statement": {
+      "name": "meta.import.rey",
+      "begin": "\\bimport\\b",
+      "end": ";",
+      "beginCaptures": {
+        "0": { "name": "keyword.declaration.import.rey" }
+      },
+      "endCaptures": {
+        "0": { "name": "punctuation.terminator.rey" }
+      },
+      "patterns": [
+        {
+          "match": "([a-zA-Z_][a-zA-Z0-9_]*)\\s*(::)\\s*\\{([^}]+)\\}",
           "captures": {
-            "0": { "name": "keyword.control.rey" },
-            "1": { "name": "entity.name.function.rey" }
+            "1": { "name": "entity.name.module.rey" },
+            "2": { "name": "punctuation.accessor.double-colon.rey" },
+            "3": { "patterns": [{ "include": "#import-names" }] }
+          }
+        },
+        {
+          "match": "([a-zA-Z_][a-zA-Z0-9_]*)\\s*(::)\\s*([a-zA-Z_][a-zA-Z0-9_]*)",
+          "captures": {
+            "1": { "name": "entity.name.module.rey" },
+            "2": { "name": "punctuation.accessor.double-colon.rey" },
+            "3": { "name": "entity.name.function.import.rey" }
+          }
+        },
+        {
+          "match": "([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\.{2,3}\\s*\\{([^}]+)\\}",
+          "captures": {
+            "1": { "name": "entity.name.module.rey" },
+            "2": { "patterns": [{ "include": "#import-names" }] }
+          }
+        },
+        {
+          "match": "([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\.{2,3}\\s*([a-zA-Z_][a-zA-Z0-9_]*)",
+          "captures": {
+            "1": { "name": "entity.name.module.rey" },
+            "2": { "name": "entity.name.function.import.rey" }
+          }
+        },
+        {
+          "name": "entity.name.module.rey",
+          "match": "[a-zA-Z_][a-zA-Z0-9_]*"
+        }
+      ]
+    },
+    "import-names": {
+      "patterns": [
+        {
+          "name": "entity.name.function.import.rey",
+          "match": "[a-zA-Z_][a-zA-Z0-9_]*"
+        }
+      ]
+    },
+    "enum-pattern": {
+      "name": "meta.enum-pattern.rey",
+      "match": "\\b([A-Z][a-zA-Z0-9_]*)\\s*(::)\\s*([A-Z][a-zA-Z0-9_]*)\\b",
+      "captures": {
+        "1": { "name": "entity.name.type.enum.rey" },
+        "2": { "name": "punctuation.accessor.double-colon.rey" },
+        "3": { "name": "variable.other.enummember.rey" }
+      }
+    },
+    "struct-decl": {
+      "name": "meta.struct.declaration.rey",
+      "begin": "\\b(struct)\\s+([A-Z][a-zA-Z0-9_]*)",
+      "end": "(?<=\\})",
+      "beginCaptures": {
+        "1": { "name": "keyword.declaration.struct.rey" },
+        "2": { "name": "entity.name.type.struct.rey" }
+      },
+      "patterns": [
+        {
+          "begin": "\\{",
+          "end": "\\}",
+          "patterns": [
+            {
+              "include": "#struct-body"
+            }
+          ]
+        }
+      ]
+    },
+    "enum-decl": {
+      "name": "meta.enum.declaration.rey",
+      "begin": "\\b(enum)\\s+([A-Z][a-zA-Z0-9_]*)",
+      "end": "(?<=\\})",
+      "beginCaptures": {
+        "1": { "name": "keyword.declaration.enum.rey" },
+        "2": { "name": "entity.name.type.enum.rey" }
+      },
+      "patterns": [
+        {
+          "begin": "\\{",
+          "end": "\\}",
+          "patterns": [
+            {
+              "name": "variable.other.enummember.rey",
+              "match": "\\b([A-Z][a-zA-Z0-9_]*)\\b"
+            },
+            {
+              "name": "punctuation.separator.comma.rey",
+              "match": ","
+            }
+          ]
+        }
+      ]
+    },
+    "struct-body": {
+      "patterns": [
+        {
+          "include": "#comments"
+        },
+        {
+          "include": "#struct-field"
+        },
+        {
+          "include": "#struct-method"
+        }
+      ]
+    },
+    "struct-field": {
+      "name": "meta.struct.field.rey",
+      "match": "(?:(pub)\\s+)?([a-zA-Z_][a-zA-Z0-9_]*)\\s*:\\s*([a-zA-Z_\\[\\]?][a-zA-Z0-9_\\[\\]?|]*(?:\\s*\\|\\s*[a-zA-Z_\\[\\]?][a-zA-Z0-9_\\[\\]?]*)*)",
+      "captures": {
+        "1": { "name": "storage.modifier.visibility.rey" },
+        "2": { "name": "variable.other.member.rey" },
+        "3": { "name": "storage.type.rey" }
+      }
+    },
+    "struct-method": {
+      "name": "meta.struct.method.rey",
+      "begin": "(?:(pub)\\s+)?\\b(func)\\s+([a-zA-Z_][a-zA-Z0-9_]*)\\s*\\(",
+      "end": "(?<=\\})|;",
+      "beginCaptures": {
+        "1": { "name": "storage.modifier.visibility.rey" },
+        "2": { "name": "keyword.declaration.func.rey" },
+        "3": { "name": "entity.name.function.rey" }
+      },
+      "patterns": [
+        {
+          "include": "#comments"
+        },
+        {
+          "name": "meta.function.parameters.rey",
+          "begin": "\\(",
+          "end": "\\)",
+          "patterns": [
+            {
+              "match": "(?:\\.\\.\\.)?([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?::\\s*([a-zA-Z_\\[\\]?][a-zA-Z0-9_\\[\\]?|]*)(?:\\s*=\\s*[^,)]+)?)?",
+              "captures": {
+                "1": { "name": "variable.parameter.rey" },
+                "2": { "name": "storage.type.rey" }
+              }
+            },
+            {
+              "name": "punctuation.separator.comma.rey",
+              "match": ","
+            }
+          ]
+        },
+        {
+          "name": "meta.function.return-type.rey",
+          "match": ":\\s*([a-zA-Z_\\[\\]?][a-zA-Z0-9_\\[\\]?|]*)",
+          "captures": {
+            "1": { "name": "storage.type.rey" }
+          }
+        },
+        {
+          "include": "#block-content"
+        }
+      ]
+    },
+    "function-decl": {
+      "name": "meta.function.declaration.rey",
+      "begin": "(?:(export)\\s+)?(?:(pub)\\s+)?\\b(func)\\s+([a-zA-Z_][a-zA-Z0-9_]*)",
+      "end": "(?<=\\})|;",
+      "beginCaptures": {
+        "1": { "name": "storage.modifier.visibility.rey" },
+        "2": { "name": "storage.modifier.visibility.rey" },
+        "3": { "name": "keyword.declaration.func.rey" },
+        "4": { "name": "entity.name.function.rey" }
+      },
+      "patterns": [
+        {
+          "include": "#function-signature"
+        },
+        {
+          "include": "#block-content"
+        }
+      ]
+    },
+    "function-signature": {
+      "patterns": [
+        {
+          "name": "meta.function.parameters.rey",
+          "begin": "\\(",
+          "end": "\\)",
+          "patterns": [
+            {
+              "match": "(?:\\.\\.\\.)?([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?::\\s*([a-zA-Z_\\[\\]?][a-zA-Z0-9_\\[\\]?|]*)(?:\\s*=\\s*[^,)]+)?)?",
+              "captures": {
+                "1": { "name": "variable.parameter.rey" },
+                "2": { "name": "storage.type.rey" }
+              }
+            },
+            {
+              "name": "punctuation.separator.comma.rey",
+              "match": ","
+            }
+          ]
+        },
+        {
+          "name": "meta.function.return-type.rey",
+          "match": ":\\s*([a-zA-Z_\\[\\]?][a-zA-Z0-9_\\[\\]?|]*)",
+          "captures": {
+            "1": { "name": "storage.type.rey" }
           }
         }
       ]
     },
-    "functionCall": {
+    "lambda": {
+      "name": "meta.lambda.rey",
+      "match": "\\(([^)]*)\\)\\s*(=>)",
+      "captures": {
+        "1": {
+          "patterns": [
+            {
+              "match": "([a-zA-Z_][a-zA-Z0-9_]*)\\s*(?::\\s*([a-zA-Z_\\[\\]?][a-zA-Z0-9_\\[\\]?|]*))?",
+              "captures": {
+                "1": { "name": "variable.parameter.rey" },
+                "2": { "name": "storage.type.rey" }
+              }
+            },
+            {
+              "name": "punctuation.separator.comma.rey",
+              "match": ","
+            }
+          ]
+        },
+        "2": { "name": "keyword.operator.arrow.rey" }
+      }
+    },
+    "builtin-functions": {
+      "name": "support.function.builtin.rey",
+      "match": "\\b(?:println|print|input|len|push|pop|abs|max|min|random|range)\\b(?=\\s*\\()"
+    },
+    "function-call": {
+      "name": "meta.function-call.rey",
+      "match": "\\b([a-zA-Z_][a-zA-Z0-9_]*)\\b(?=\\s*\\()",
+      "captures": {
+        "1": { "name": "entity.name.function.call.rey" }
+      }
+    },
+    "identifiers": {
       "patterns": [
         {
-          "name": "meta.function-call.rey",
-          "match": "\\b([A-Za-z_][A-Za-z0-9_]*)\\b(?=\\s*\\()",
-          "captures": {
-            "1": { "name": "entity.name.function.rey" }
-          }
+          "name": "variable.other.rey",
+          "match": "\\b[a-zA-Z_][a-zA-Z0-9_]*\\b"
+        }
+      ]
+    },
+    "expression-content": {
+      "patterns": [
+        { "include": "#strings" },
+        { "include": "#strings-multiline" },
+        { "include": "#numbers" },
+        { "include": "#booleans" },
+        { "include": "#null" },
+        { "include": "#operators" },
+        { "include": "#identifiers" }
+      ]
+    },
+    "block-content": {
+      "patterns": [
+        {
+          "begin": "\\{",
+          "end": "\\}",
+          "patterns": [
+            {
+              "include": "source.rey"
+            }
+          ]
         }
       ]
     }

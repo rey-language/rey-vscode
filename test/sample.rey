@@ -1,0 +1,15 @@
+
+func main(): int {
+    var n = 5;
+    if (abs(n) > 10) {
+        return 1;
+    } else {
+        println("This will never be printed");
+        return 0;
+    }
+
+    struct Point {
+        x: int;
+        y: int;
+    }
+}
