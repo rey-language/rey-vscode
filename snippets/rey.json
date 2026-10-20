@@ -1,8 +1,17 @@
 {
+  "Main Function": {
+    "prefix": "main",
+    "body": [
+      "func main(): void {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Standard main entry point function"
+  },
   "Function Declaration": {
     "prefix": "func",
     "body": [
-      "func ${1:name}(${2:params}): ${3:Void} {",
+      "func ${1:name}(${2:params}): ${3:void} {",
       "\t$0",
       "}"
     ],
@@ -11,69 +20,66 @@
   "Public Function": {
     "prefix": "pub func",
     "body": [
-      "pub func ${1:name}(${2:params}): ${3:Void} {",
+      "pub func ${1:name}(${2:params}): ${3:void} {",
       "\t$0",
       "}"
     ],
-    "description": "Create a public function declaration"
-  },
-  "Export Public Function": {
-    "prefix": "export pub func",
-    "body": [
-      "export pub func ${1:name}(${2:params}): ${3:Void} {",
-      "\t$0",
-      "}"
-    ],
-    "description": "Create an exported public function"
+    "description": "Create an exported/public function declaration"
   },
   "Struct Declaration": {
     "prefix": "struct",
     "body": [
       "struct ${1:Name} {",
-      "\t${2:field}: ${3:type},",
+      "\tpub ${2:field}: ${3:int},",
       "",
-      "\tpub func ${4:create}(${5:params}): $1 {",
-      "\t\treturn $1 { $0 };",
+      "\tpub func ${4:method}(): ${5:void} {",
+      "\t\t$0",
       "\t}",
       "}"
     ],
-    "description": "Create a struct with a static factory method"
+    "description": "Create a struct declaration with fields and methods"
   },
   "Enum Declaration": {
     "prefix": "enum",
     "body": [
       "enum ${1:Name} {",
       "\t${2:Variant1},",
-      "\t${3:Variant2},",
+      "\t${3:Variant2}(${4:payload: string}),",
       "\t$0",
       "}"
     ],
-    "description": "Create an enum declaration"
+    "description": "Create an enum declaration with unit and payload variants"
   },
   "Match Expression": {
     "prefix": "match",
     "body": [
       "match ${1:value} {",
-      "\t${2:Pattern1} => { $3 },",
-      "\t${4:Pattern2} => { $5 },",
-      "\t_ => { $0 },",
+      "\t${2:Pattern1} => {",
+      "\t\t$3",
+      "\t},",
+      "\t${4:Pattern2} => {",
+      "\t\t$5",
+      "\t},",
+      "\t_ => {",
+      "\t\t$0",
+      "\t},",
       "}"
     ],
-    "description": "Create a match expression"
+    "description": "Create an exhaustive match expression"
   },
-  "For Loop": {
+  "For In Loop": {
     "prefix": "for",
     "body": [
       "for ${1:item} in ${2:iterable} {",
       "\t$0",
       "}"
     ],
-    "description": "Create a for-in loop"
+    "description": "Create a for-in collection loop"
   },
   "For Range Loop": {
     "prefix": "forr",
     "body": [
-      "for ${1:i} in range(${2:start}, ${3:end}) {",
+      "for ${1:i} in range(${2:0}, ${3:count}) {",
       "\t$0",
       "}"
     ],
@@ -92,15 +98,18 @@
     "prefix": "loop",
     "body": [
       "loop {",
+      "\tif ${1:condition} {",
+      "\t\tbreak;",
+      "\t}",
       "\t$0",
       "}"
     ],
-    "description": "Create an infinite loop"
+    "description": "Create an infinite loop with break condition"
   },
   "If Statement": {
     "prefix": "if",
     "body": [
-      "if (${1:condition}) {",
+      "if ${1:condition} {",
       "\t$0",
       "}"
     ],
@@ -109,7 +118,7 @@
   "If-Else Statement": {
     "prefix": "ife",
     "body": [
-      "if (${1:condition}) {",
+      "if ${1:condition} {",
       "\t$2",
       "} else {",
       "\t$0",
@@ -118,77 +127,141 @@
     "description": "Create an if-else statement"
   },
   "Lambda Expression": {
-    "prefix": "=>",
+    "prefix": "lambda",
     "body": [
       "(${1:params}) => ${2:expression}"
     ],
     "description": "Create a lambda expression"
   },
+  "Lambda Block": {
+    "prefix": "lambdab",
+    "body": [
+      "(${1:params}) => {",
+      "\t$0",
+      "}"
+    ],
+    "description": "Create a multi-line lambda block"
+  },
   "Variable Declaration": {
     "prefix": "var",
     "body": [
-      "var ${1:name}${2:: ${3:type}} = ${4:value};$0"
+      "var ${1:name}: ${2:type} = ${3:value};$0"
     ],
-    "description": "Create a mutable variable declaration"
+    "description": "Create a typed mutable variable declaration"
   },
   "Constant Declaration": {
     "prefix": "const",
     "body": [
-      "const ${1:NAME}${2:: ${3:type}} = ${4:value};$0"
+      "const ${1:NAME}: ${2:type} = ${3:value};$0"
     ],
-    "description": "Create a constant declaration"
+    "description": "Create an immutable constant declaration"
   },
-  "Import Statement": {
+  "Import Module": {
     "prefix": "import",
     "body": [
       "import ${1:module};$0"
     ],
-    "description": "Create an import statement"
+    "description": "Import an entire module namespace"
   },
-  "Import with Submodule": {
+  "Import Symbols": {
     "prefix": "importfrom",
     "body": [
-      "import ${1:module}::${2:item};$0"
+      "import ${1:module}::{${2:symbols}};$0"
     ],
-    "description": "Create an import statement with submodule"
+    "description": "Import specific symbols from a module"
   },
-  "Print Variable": {
+  "Import File Path": {
+    "prefix": "importpath",
+    "body": [
+      "import \"${1:path/file.rey}\";$0"
+    ],
+    "description": "Import via relative file path"
+  },
+  "Print Line": {
     "prefix": "println",
     "body": [
-      "println($0);"
+      "println(${1:\"$0\"});"
     ],
-    "description": "Create a println statement"
+    "description": "Print to stdout with newline"
   },
-  "Function Parameter": {
-    "prefix": "param",
+  "Print": {
+    "prefix": "print",
     "body": [
-      "${1:name}: ${2:type}${3: = ${4:default}}"
+      "print(${1:\"$0\"});"
     ],
-    "description": "Create a function parameter"
+    "description": "Print to stdout without newline"
   },
-  "Dictionary Literal": {
-    "prefix": "dict",
+  "Vec New": {
+    "prefix": "vec",
     "body": [
-      "{${1:key}: ${2:value}$0}"
+      "var ${1:list} = Vec.new();$0"
     ],
-    "description": "Create a dictionary literal"
+    "description": "Create a new growable dynamic vector"
   },
-  "Array Literal": {
-    "prefix": "arr",
+  "HashMap New": {
+    "prefix": "map",
     "body": [
-      "[${1:element}$0]"
+      "var ${1:map} = HashMap.new();$0"
     ],
-    "description": "Create an array literal"
+    "description": "Create a new string-keyed hash map"
   },
-  "Try-Catch Pattern": {
-    "prefix": "try",
+  "Option Match": {
+    "prefix": "optmatch",
     "body": [
-      "// Rey does not have exceptions - use Result types or match on Optionals",
-      "match ${1:result} {",
-      "\t${2:Ok}::value => { $3 },",
-      "\t${4:Err}::error => { $0 },",
+      "match ${1:option} {",
+      "\tOption::Some(${2:val}) => {",
+      "\t\t$3",
+      "\t},",
+      "\tOption::None => {",
+      "\t\t$0",
+      "\t},",
       "}"
     ],
-    "description": "Template for handling Result types with match"
+    "description": "Match on Option::Some and Option::None"
+  },
+  "Result Match": {
+    "prefix": "resmatch",
+    "body": [
+      "match ${1:result} {",
+      "\tResult::Ok(${2:val}) => {",
+      "\t\t$3",
+      "\t},",
+      "\tResult::Err(${4:err}) => {",
+      "\t\t$0",
+      "\t},",
+      "}"
+    ],
+    "description": "Match on Result::Ok and Result::Err"
+  },
+  "Read File": {
+    "prefix": "readfile",
+    "body": [
+      "var ${1:content} = readFile(${2:\"path.txt\"});$0"
+    ],
+    "description": "Read file contents to string"
+  },
+  "Write File": {
+    "prefix": "writefile",
+    "body": [
+      "writeFile(${1:\"path.txt\"}, ${2:content});$0"
+    ],
+    "description": "Write string contents to file"
+  },
+  "Execute Process": {
+    "prefix": "exec",
+    "body": [
+      "var ${1:res} = exec(${2:\"ls -la\"});",
+      "if ${1:res}.isOk() {",
+      "\tprintln(${1:res}.unwrap());",
+      "}$0"
+    ],
+    "description": "Execute shell command via /bin/sh -c"
+  },
+  "Assert Statement": {
+    "prefix": "assert",
+    "body": [
+      "assert(${1:condition}, \"${2:Assertion failed}\");$0"
+    ],
+    "description": "Assert condition is true or panic with message"
   }
 }

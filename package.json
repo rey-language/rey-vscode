@@ -1,8 +1,8 @@
 {
   "name": "rey-lang",
   "displayName": "Rey Language Support",
-  "description": "Full language support for the Rey programming language - syntax, IntelliSense, diagnostics",
-  "version": "0.1.0",
+  "description": "Full language support for the Rey programming language v0.3.0 - syntax, IntelliSense, diagnostics, and compiler integration",
+  "version": "0.3.0",
   "main": "./out/client/extension.js",
   "publisher": "rey-language",
   "license": "MIT",
@@ -10,12 +10,16 @@
     "vscode": "^1.90.0"
   },
   "categories": [
-    "Programming Languages"
+    "Programming Languages",
+    "Linters",
+    "Snippets"
   ],
   "keywords": [
     "rey",
     "language",
-    "programming"
+    "programming",
+    "lsp",
+    "compiler"
   ],
   "activationEvents": [
     "onLanguage:rey"
@@ -24,8 +28,13 @@
     "languages": [
       {
         "id": "rey",
-        "aliases": ["Rey", "rey"],
-        "extensions": [".rey"],
+        "aliases": [
+          "Rey",
+          "rey"
+        ],
+        "extensions": [
+          ".rey"
+        ],
         "configuration": "./language-configuration.json"
       }
     ],
@@ -44,6 +53,21 @@
     ],
     "commands": [
       {
+        "command": "rey.runFile",
+        "title": "Rey: Run File",
+        "category": "Rey"
+      },
+      {
+        "command": "rey.buildFile",
+        "title": "Rey: Build File",
+        "category": "Rey"
+      },
+      {
+        "command": "rey.checkFile",
+        "title": "Rey: Check Diagnostics",
+        "category": "Rey"
+      },
+      {
         "command": "rey.restartServer",
         "title": "Rey: Restart Language Server",
         "category": "Rey"
@@ -54,6 +78,20 @@
         "category": "Rey"
       }
     ],
+    "menus": {
+      "editor/context": [
+        {
+          "when": "resourceExtname == .rey",
+          "command": "rey.runFile",
+          "group": "run"
+        },
+        {
+          "when": "resourceExtname == .rey",
+          "command": "rey.buildFile",
+          "group": "run"
+        }
+      ]
+    },
     "configuration": {
       "title": "Rey Language Server",
       "properties": {
@@ -65,13 +103,17 @@
         "rey.languageServer.trace": {
           "type": "string",
           "default": "off",
-          "enum": ["off", "messages", "verbose"],
+          "enum": [
+            "off",
+            "messages",
+            "verbose"
+          ],
           "description": "Trace level for language server communication"
         },
         "rey.compiler.path": {
           "type": "string",
-          "default": "reyc",
-          "description": "Path to the Rey compiler executable"
+          "default": "rey",
+          "description": "Path to the Rey compiler executable (defaults to 'rey' on PATH or workspace build)"
         },
         "rey.compiler.runOnSave": {
           "type": "boolean",
@@ -91,7 +133,8 @@
     "compile": "tsc -b",
     "watch": "tsc -b -w",
     "lint": "eslint src --ext ts",
-    "package": "vsce package"
+    "package": "vsce package",
+    "test": "tsc -b && node --test out/test/**/*.test.js"
   },
   "dependencies": {
     "vscode-languageclient": "^9.0.1",
@@ -107,5 +150,9 @@
     "eslint": "^8.57.0",
     "@typescript-eslint/eslint-plugin": "^7.13.0",
     "@typescript-eslint/parser": "^7.13.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/rey-language/rey-vscode"
   }
 }
